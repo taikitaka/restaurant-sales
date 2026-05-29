@@ -1,0 +1,59 @@
+CREATE TABLE IF NOT EXISTS sales (
+  id TEXT PRIMARY KEY,
+  date TEXT NOT NULL,
+  period TEXT NOT NULL DEFAULT 'other',
+  revenue NUMERIC NOT NULL DEFAULT 0,
+  customers INTEGER NOT NULL DEFAULT 0,
+  note TEXT
+);
+
+CREATE TABLE IF NOT EXISTS menu_items (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  category TEXT NOT NULL DEFAULT 'その他',
+  price NUMERIC NOT NULL DEFAULT 0,
+  is_active BOOLEAN NOT NULL DEFAULT true
+);
+
+CREATE TABLE IF NOT EXISTS sales_items (
+  id TEXT PRIMARY KEY,
+  date TEXT NOT NULL,
+  menu_item_id TEXT NOT NULL,
+  menu_item_name TEXT NOT NULL,
+  quantity INTEGER NOT NULL DEFAULT 1,
+  revenue NUMERIC NOT NULL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS reservations (
+  id TEXT PRIMARY KEY,
+  date TEXT NOT NULL,
+  time TEXT NOT NULL,
+  name TEXT NOT NULL,
+  guests INTEGER NOT NULL DEFAULT 1,
+  table_no TEXT,
+  status TEXT NOT NULL DEFAULT 'confirmed',
+  note TEXT,
+  phone TEXT
+);
+
+CREATE TABLE IF NOT EXISTS settings (
+  id TEXT PRIMARY KEY,
+  restaurant_name TEXT NOT NULL DEFAULT '私のお店',
+  target_daily_revenue NUMERIC NOT NULL DEFAULT 100000,
+  target_monthly_revenue NUMERIC NOT NULL DEFAULT 2500000,
+  total_seats INTEGER NOT NULL DEFAULT 30,
+  open_time TEXT NOT NULL DEFAULT '11:00',
+  close_time TEXT NOT NULL DEFAULT '22:00'
+);
+
+ALTER TABLE sales ENABLE ROW LEVEL SECURITY;
+ALTER TABLE menu_items ENABLE ROW LEVEL SECURITY;
+ALTER TABLE sales_items ENABLE ROW LEVEL SECURITY;
+ALTER TABLE reservations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE settings ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "public_all" ON sales FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "public_all" ON menu_items FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "public_all" ON sales_items FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "public_all" ON reservations FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "public_all" ON settings FOR ALL USING (true) WITH CHECK (true);
